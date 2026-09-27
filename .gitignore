@@ -1,0 +1,28 @@
+# Secrets: only .env.example (placeholders) is committed
+.env
+.env.*
+!.env.example
+
+# Local-only data pack: the database and product images are never committed
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Frontend build output and dependencies
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Temp files written by the audit logger
+output/*.json.tmp
+output/audit_trail.unreadable-*.json
+
+# OS / editor
+.DS_Store

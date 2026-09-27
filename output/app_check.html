@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Customs — App Check (Problem 11)</title>
+<style>
+  :root { --navy: #0a2a5c; --yale: #00356b; --ink: #1c2330; --muted: #5b6577; --line: #e3e8f0; --bg: #f5f7fb; --ok: #1f7a4d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; }
+  header { background: linear-gradient(120deg, #06193a, var(--yale)); color: #fff; padding: 36px 24px 32px; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  header p.eyebrow { margin: 0 0 6px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+  header h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 34px; font-weight: 600; }
+  header p.sub { margin: 8px 0 0; opacity: .85; }
+  nav.summary { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  nav.summary a { color: #fff; text-decoration: none; font-size: 14px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .25); padding: 6px 12px; border-radius: 999px; }
+  nav.summary a b { color: #9be3bd; margin-left: 6px; }
+  main { padding: 28px 24px 48px; display: grid; gap: 32px; }
+  section { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 28px; box-shadow: 0 1px 2px rgba(10, 42, 92, .04), 0 8px 24px rgba(10, 42, 92, .05); }
+  .head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+  h2 { margin: 0; font-size: 28px; line-height: 1.2; color: var(--navy); }
+  h2 .num { color: var(--muted); font-weight: 600; margin-right: 6px; }
+  .pass { font-size: 13px; font-weight: 800; letter-spacing: .08em; color: #fff; background: var(--ok); padding: 4px 12px; border-radius: 999px; }
+  dl { display: grid; grid-template-columns: 210px 1fr; gap: 10px 20px; margin: 0 0 18px; max-width: 95ch; }
+  dt { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  dd { margin: 0; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .facts li { font-size: 14px; background: #eef3fb; border: 1px solid #d6e2f3; color: var(--navy); padding: 4px 10px; border-radius: 8px; }
+  code { font-size: .92em; background: #f1f4f9; padding: 1px 5px; border-radius: 4px; }
+  figure { margin: 0; }
+  figure a { display: block; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  figure img { display: block; width: 100%; height: auto; }
+  figcaption { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding-bottom: 32px; }
+  @media (max-width: 700px) { header h1 { font-size: 26px; } h2 { font-size: 22px; } section { padding: 18px; } dl { grid-template-columns: 1fr; gap: 4px; } dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Problem 11 · Site testing / app check</p>
+    <h1>Campus Customs App Check</h1>
+    <p class="sub">All three tests were run on the live site on 2026-09-26 (React frontend on :5173, FastAPI + PydanticAI agent on :8000) and checked against campus_customs.db.</p>
+    <nav class="summary">
+      <a href="#inventory">1. Inventory and Price Check <b>PASS</b></a>
+      <a href="#search">2. Dynamic Search-Result Cards <b>PASS</b></a>
+      <a href="#usability">3. Problem 9 Usability Feature <b>PASS</b></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="inventory">
+    <div class="head">
+      <h2><span class="num">1.</span>Inventory and Price Check</h2>
+      <span class="pass">PASS</span>
+    </div>
+    <dl>
+      <dt>What was tested</dt>
+      <dd>I asked the chatbot, “How much is the Basic Hoodie Big Yale, and how many do you have in size XL?”, and compared its answer with a direct query of campus_customs.db.</dd>
+      <dt>What the screenshot proves</dt>
+      <dd>The chatbot answered “$68.00” and “Size XL has 2 in stock”, exactly the database values. The audit log shows it got them from its <code>lookup_product</code> and <code>check_stock</code> database tools.</dd>
+      <dt>Verified in the database</dt>
+      <dd><ul class="facts"><li>Product: <b>Basic Hoodie Big Yale</b></li><li>Price: <b>$68.00</b></li><li>Size XL: <b>2 units</b></li><li>All sizes: <b>60 units</b></li></ul></dd>
+    </dl>
+    <figure>
+      <a href="app_check_images/inventory.png"><img src="app_check_images/inventory.png" alt="Chatbot answering that the Basic Hoodie Big Yale is $68.00 and size XL has 2 in stock"></a>
+      <figcaption>app_check_images/inventory.png: live site, guest chat.</figcaption>
+    </figure>
+  </section>
+
+  <section id="search">
+    <div class="head">
+      <h2><span class="num">2.</span>Dynamic Search-Result Cards</h2>
+      <span class="pass">PASS</span>
+    </div>
+    <dl>
+      <dt>What was tested</dt>
+      <dd>I asked the chatbot, “What hoodies do you have?” (category: <b>hoodies</b>), then clicked the first card it produced.</dd>
+      <dt>What the screenshot proves</dt>
+      <dd>The agent ran a <code>search_products</code> catalogue search, and the Products page switched to the <b>27 hoodie cards</b> that search returned, each a real catalogue product at its database price.</dd>
+      <dt>Verified</dt>
+      <dd><ul class="facts"><li>Category: <b>hoodies</b></li><li>Cards shown: <b>27</b></li><li>Clicked “Champion Reverse Weave Hoodie 1” → opened <b>/products/champion-reverse-weave-hoodie-1</b></li></ul></dd>
+    </dl>
+    <figure>
+      <a href="app_check_images/search_results.png"><img src="app_check_images/search_results.png" alt="Products page titled What hoodies do you have? showing 27 hoodie cards from the chat search"></a>
+      <figcaption>app_check_images/search_results.png: the “From chat” bar shows the search the agent ran.</figcaption>
+    </figure>
+  </section>
+
+  <section id="usability">
+    <div class="head">
+      <h2><span class="num">3.</span>Problem 9 Usability Feature</h2>
+      <span class="pass">PASS</span>
+    </div>
+    <dl>
+      <dt>What was tested</dt>
+      <dd>The Problem 9 <b>product filtering and sorting</b> feature on the Products page. I chose Hoodies, Price $40–$70, Size in stock XS and Sort price low to high.</dd>
+      <dt>What the screenshot proves</dt>
+      <dd>The page narrowed to <b>20 of 102 products</b>, the same 20 a direct database query returns, sorted by price. It shows a removable pill for each active filter and a count beside every option.</dd>
+      <dt>Verified</dt>
+      <dd><ul class="facts"><li>Filters: <b>Hoodies · $40–$70 · XS</b></li><li>Shown / expected: <b>20 / 20</b></li><li>Sort: <b>price low → high</b></li></ul></dd>
+    </dl>
+    <figure>
+      <a href="app_check_images/usability.png"><img src="app_check_images/usability.png" alt="Products page with Hoodies, $40 to $70 and size XS filters active, showing 20 of 102 products"></a>
+      <figcaption>app_check_images/usability.png: live site, Products page.</figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer>Screenshots of the running application, taken with headless Chromium. Click any image to open it full size.</footer>
+</body>
+</html>
